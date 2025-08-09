@@ -4,30 +4,30 @@
 
 {% block page_content %}
 <!-- Hero Section -->
-<div class="hero-section text-white py-5">
+<div class="hero-section text-white section-padding-lg">
     <div class="container">
         <div class="row align-items-center min-vh-75">
             <div class="col-lg-6">
                 <div class="position-relative z-index-2">
                     <h1 class="display-3 fw-bold mb-4">
                         Modern Cable Service
-                        <span class="d-block text-warning">Management</span>
+                        <span class="d-block" style="color: #f8f9fa;">Management</span>
                     </h1>
-                    <p class="lead mb-4 opacity-90">
+                    <p class="lead mb-5 opacity-90 fs-4">
                         Complete solution for managing cable and network services with advanced customer management, 
                         real-time payment tracking, and intelligent service monitoring.
                     </p>
-                    <div class="d-flex flex-wrap gap-3 mb-4">
-                        <a href="/login" class="btn btn-light btn-lg px-4">
+                    <div class="d-flex flex-wrap gap-3 mb-5">
+                        <a href="/login" class="btn btn-light btn-lg px-5 py-3">
                             <i class="fas fa-sign-in-alt me-2"></i>
                             Seller Portal
                         </a>
-                        <a href="#features" class="btn btn-outline-light btn-lg px-4">
+                        <a href="#features" class="btn btn-outline-light btn-lg px-5 py-3">
                             <i class="fas fa-play me-2"></i>
                             Learn More
                         </a>
                     </div>
-                    <div class="d-flex align-items-center gap-4 text-sm opacity-75">
+                    <div class="d-flex align-items-center gap-4 opacity-75">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-check-circle me-2"></i>
                             Real-time Tracking
@@ -46,10 +46,12 @@
             <div class="col-lg-6">
                 <div class="text-center position-relative">
                     <div class="position-relative d-inline-block">
-                        <i class="fas fa-tv display-1 opacity-75"></i>
-                        <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
-                            <div class="bg-white bg-opacity-10 rounded-circle p-4">
-                                <i class="fas fa-signal text-warning fa-2x"></i>
+                        <div class="bg-white bg-opacity-10 rounded-4 p-5 d-inline-block">
+                            <i class="fas fa-tv display-1"></i>
+                        </div>
+                        <div class="position-absolute top-50 start-50 translate-middle">
+                            <div class="bg-white rounded-circle p-3 shadow-lg">
+                                <i class="fas fa-signal text-dark fa-2x"></i>
                             </div>
                         </div>
                     </div>
@@ -60,61 +62,88 @@
 </div>
 
 <!-- Features Section -->
-<div class="container py-5" id="features">
+<div class="container section-padding-lg" id="features">
     <div class="row mb-5">
         <div class="col-12 text-center">
-            <h2 class="display-5 fw-bold mb-3">Why Choose Our Platform?</h2>
-            <p class="lead text-muted">Professional management system designed for modern cable service providers</p>
+            <h2 class="display-5 fw-bold mb-4">Why Choose Our Platform?</h2>
+            <p class="lead text-muted fs-5">Professional management system designed for modern cable service providers</p>
         </div>
     </div>
     
     <div class="row g-4">
         <div class="col-lg-4 col-md-6">
-            <div class="card h-100 border-0 shadow-sm">
+            <div class="card-modern h-100">
                 <div class="card-body text-center p-4">
-                    <div class="stats-icon mx-auto mb-3" style="background: var(--primary-color);">
+                    <div class="stats-icon mx-auto mb-4">
                         <i class="fas fa-users"></i>
                     </div>
-                    <h5 class="fw-bold mb-3">Smart Customer Management</h5>
-                    <p class="text-muted">Advanced customer profile system with detailed tracking, automated status updates, and comprehensive service history.</p>
-                    <ul class="list-unstyled text-start mt-3">
-                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Automated service activation</li>
-                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Customer service history</li>
-                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Real-time status tracking</li>
+                    <h5 class="fw-bold mb-3 fs-4">Smart Customer Management</h5>
+                    <p class="text-muted mb-4">Advanced customer profile system with detailed tracking, automated status updates, and comprehensive service history.</p>
+                    <ul class="list-unstyled text-start">
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="fas fa-check text-success me-3"></i>
+                            <span class="fw-medium">Automated service activation</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="fas fa-check text-success me-3"></i>
+                            <span class="fw-medium">Customer service history</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="fas fa-check text-success me-3"></i>
+                            <span class="fw-medium">Real-time status tracking</span>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
         
         <div class="col-lg-4 col-md-6">
-            <div class="card h-100 border-0 shadow-sm">
+            <div class="card-modern h-100">
                 <div class="card-body text-center p-4">
-                    <div class="stats-icon mx-auto mb-3" style="background: var(--success-color);">
+                    <div class="stats-icon mx-auto mb-4" style="background: var(--success-color);">
                         <i class="fas fa-credit-card"></i>
                     </div>
-                    <h5 class="fw-bold mb-3">Advanced Payment System</h5>
-                    <p class="text-muted">Complete payment recording and tracking with multiple payment modes, automated receipts, and revenue analytics.</p>
-                    <ul class="list-unstyled text-start mt-3">
-                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Multiple payment methods</li>
-                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Automated payment tracking</li>
-                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Revenue analytics</li>
+                    <h5 class="fw-bold mb-3 fs-4">Advanced Payment System</h5>
+                    <p class="text-muted mb-4">Complete payment recording and tracking with multiple payment modes, automated receipts, and revenue analytics.</p>
+                    <ul class="list-unstyled text-start">
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="fas fa-check text-success me-3"></i>
+                            <span class="fw-medium">Multiple payment methods</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="fas fa-check text-success me-3"></i>
+                            <span class="fw-medium">Automated payment tracking</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="fas fa-check text-success me-3"></i>
+                            <span class="fw-medium">Revenue analytics</span>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
         
         <div class="col-lg-4 col-md-6">
-            <div class="card h-100 border-0 shadow-sm">
+            <div class="card-modern h-100">
                 <div class="card-body text-center p-4">
-                    <div class="stats-icon mx-auto mb-3" style="background: var(--info-color);">
+                    <div class="stats-icon mx-auto mb-4" style="background: var(--info-color);">
                         <i class="fas fa-chart-line"></i>
                     </div>
-                    <h5 class="fw-bold mb-3">Real-time Monitoring</h5>
-                    <p class="text-muted">Live service monitoring with automated status updates, performance analytics, and intelligent alerts.</p>
-                    <ul class="list-unstyled text-start mt-3">
-                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Live service monitoring</li>
-                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Performance analytics</li>
-                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Automated alerts</li>
+                    <h5 class="fw-bold mb-3 fs-4">Real-time Monitoring</h5>
+                    <p class="text-muted mb-4">Live service monitoring with automated status updates, performance analytics, and intelligent alerts.</p>
+                    <ul class="list-unstyled text-start">
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="fas fa-check text-success me-3"></i>
+                            <span class="fw-medium">Live service monitoring</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="fas fa-check text-success me-3"></i>
+                            <span class="fw-medium">Performance analytics</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="fas fa-check text-success me-3"></i>
+                            <span class="fw-medium">Automated alerts</span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -123,12 +152,12 @@
 </div>
 
 <!-- Packages Section -->
-<div class="bg-light py-5" id="packages">
+<div class="bg-light section-padding-lg" id="packages">
     <div class="container">
         <div class="row mb-5">
             <div class="col-12 text-center">
-                <h2 class="display-5 fw-bold mb-3">Entertainment Packages</h2>
-                <p class="lead text-muted">Choose from our variety of premium entertainment packages</p>
+                <h2 class="display-5 fw-bold mb-4">Entertainment Packages</h2>
+                <p class="lead text-muted fs-5">Choose from our variety of premium entertainment packages</p>
             </div>
         </div>
         
@@ -136,30 +165,40 @@
             {% if packages %}
             {% for package in packages %}
             <div class="col-lg-3 col-md-6">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-header bg-white border-0 text-center py-3">
-                        <div class="stats-icon mx-auto mb-2" style="background: var(--primary-color);">
+                <div class="card-modern h-100">
+                    <div class="card-header bg-white border-0 text-center py-4">
+                        <div class="stats-icon mx-auto mb-3">
                             <i class="fas fa-tv"></i>
                         </div>
-                        <h5 class="fw-bold mb-0">{{ package.package_name }}</h5>
+                        <h5 class="fw-bold mb-0 fs-4">{{ package.package_name }}</h5>
                     </div>
                     <div class="card-body text-center">
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <span class="display-6 fw-bold text-primary">${{ "%.0f"|format(package.price) }}</span>
-                            <span class="text-muted">/month</span>
+                            <span class="text-muted fs-5">/month</span>
                         </div>
-                        <p class="text-muted mb-3">{{ package.description or 'Premium entertainment package with quality channels' }}</p>
+                        <p class="text-muted mb-4">{{ package.description or 'Premium entertainment package with quality channels' }}</p>
                         {% if package.channels %}
-                        <div class="mb-3">
-                            <small class="text-muted d-flex align-items-center justify-content-center">
-                                <i class="fas fa-list me-2"></i>
-                                {{ package.channels.split('\n')|length }} premium channels included
-                            </small>
+                        <div class="mb-4">
+                            <div class="d-flex align-items-center justify-content-center mb-3">
+                                <i class="fas fa-list me-2 text-primary"></i>
+                                <span class="fw-medium">{{ package.channels.split('\n')|length }} premium channels</span>
+                            </div>
+                            <div class="text-start">
+                                {% for channel in package.channels.split('\n')[:3] %}
+                                    {% if channel.strip() %}
+                                        <span class="badge bg-secondary me-1 mb-2">{{ channel.strip() }}</span>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if package.channels.split('\n')|length > 3 %}
+                                    <span class="badge bg-primary">+{{ package.channels.split('\n')|length - 3 }} more</span>
+                                {% endif %}
+                            </div>
                         </div>
                         {% endif %}
                     </div>
                     <div class="card-footer bg-white border-0 text-center">
-                        <a href="/login" class="btn btn-outline-primary">
+                        <a href="/login" class="btn btn-outline-primary w-100">
                             <i class="fas fa-info-circle me-2"></i>
                             View Details
                         </a>
@@ -169,14 +208,14 @@
             {% endfor %}
             {% else %}
             <div class="col-12">
-                <div class="card border-0 shadow-sm">
+                <div class="card-modern">
                     <div class="card-body text-center py-5">
-                        <div class="stats-icon mx-auto mb-3" style="background: var(--secondary-color); color: var(--text-secondary);">
+                        <div class="stats-icon mx-auto mb-4" style="background: var(--accent-color); color: var(--text-secondary);">
                             <i class="fas fa-box"></i>
                         </div>
                         <h4 class="fw-bold mb-3">Packages Coming Soon</h4>
-                        <p class="text-muted mb-4">We're preparing exciting entertainment packages for you!</p>
-                        <a href="/login" class="btn btn-primary btn-lg">
+                        <p class="text-muted mb-4 fs-5">We're preparing exciting entertainment packages for you!</p>
+                        <a href="/login" class="btn btn-primary btn-lg px-5">
                             <i class="fas fa-sign-in-alt me-2"></i>
                             Access Management Portal
                         </a>
@@ -189,19 +228,19 @@
 </div>
 
 <!-- CTA Section -->
-<div class="container py-5">
+<div class="container section-padding-lg">
     <div class="row">
         <div class="col-12">
-            <div class="card border-0 shadow-lg" style="background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));">
-                <div class="card-body text-center py-5 text-white">
-                    <h2 class="display-6 fw-bold mb-3">Ready to Get Started?</h2>
-                    <p class="lead mb-4 opacity-90">Join thousands of cable service providers who trust our platform</p>
+            <div class="card-dark text-center">
+                <div class="card-body py-5">
+                    <h2 class="display-6 fw-bold mb-4">Ready to Get Started?</h2>
+                    <p class="lead mb-5 opacity-90 fs-5">Join thousands of cable service providers who trust our platform</p>
                     <div class="d-flex flex-wrap justify-content-center gap-3">
-                        <a href="/login" class="btn btn-light btn-lg px-4">
+                        <a href="/login" class="btn btn-light btn-lg px-5 py-3">
                             <i class="fas fa-rocket me-2"></i>
                             Start Managing
                         </a>
-                        <a href="#features" class="btn btn-outline-light btn-lg px-4">
+                        <a href="#features" class="btn btn-outline-light btn-lg px-5 py-3">
                             <i class="fas fa-question-circle me-2"></i>
                             Learn More
                         </a>
