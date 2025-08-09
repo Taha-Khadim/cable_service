@@ -56,6 +56,11 @@ fixtures = [
 # 	"Role": "home_page"
 # }
 
+# Website route rules
+website_route_rules = [
+	{"from_route": "/customer-registration", "to_route": "/app/customer-profile/new"},
+]
+
 # Generators
 # ----------
 

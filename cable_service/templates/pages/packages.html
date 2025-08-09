@@ -7,10 +7,10 @@
     <div class="row">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Package Management</h2>
+                <h2><i class="fas fa-box me-2"></i>Package Management</h2>
                 <div>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPackageModal">
-                        Add New Package
+                        <i class="fas fa-plus me-2"></i>Add New Package
                     </button>
                     <a href="/dashboard" class="btn btn-outline-secondary">Back to Dashboard</a>
                 </div>
@@ -19,20 +19,24 @@
     </div>
     
     <div class="row">
+        {% if packages %}
         {% for package in packages %}
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">{{ package.package_name }}</h5>
                     <span class="badge bg-{{ 'success' if package.is_active else 'secondary' }}">
+                        <i class="fas fa-{{ 'check' if package.is_active else 'times' }} me-1"></i>
                         {{ 'Active' if package.is_active else 'Inactive' }}
                     </span>
                 </div>
                 <div class="card-body">
-                    <h4 class="text-primary">${{ package.price }}</h4>
+                    <h4 class="text-primary">
+                        <i class="fas fa-dollar-sign"></i>{{ "%.2f"|format(package.price) }}
+                    </h4>
                     <p class="card-text">{{ package.description or 'No description available' }}</p>
                     <div class="mb-3">
-                        <strong>Channels:</strong>
+                        <strong><i class="fas fa-tv me-1"></i>Channels:</strong>
                         <div class="mt-2">
                             {% if package.channels %}
                                 {% for channel in package.channels.split('\n') %}
@@ -48,16 +52,31 @@
                 </div>
                 <div class="card-footer">
                     <button class="btn btn-sm btn-outline-primary" onclick="editPackage('{{ package.name }}')">
-                        Edit
+                        <i class="fas fa-edit me-1"></i>Edit
                     </button>
                     <button class="btn btn-sm btn-outline-{{ 'danger' if package.is_active else 'success' }}" 
                             onclick="togglePackage('{{ package.name }}', {{ package.is_active|int }})">
+                        <i class="fas fa-{{ 'times' if package.is_active else 'check' }} me-1"></i>
                         {{ 'Deactivate' if package.is_active else 'Activate' }}
                     </button>
                 </div>
             </div>
         </div>
         {% endfor %}
+        {% else %}
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-box fa-4x text-muted mb-3"></i>
+                    <h4>No Packages Yet</h4>
+                    <p class="text-muted">Start by creating your first entertainment package</p>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPackageModal">
+                        <i class="fas fa-plus me-2"></i>Create First Package
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>
 

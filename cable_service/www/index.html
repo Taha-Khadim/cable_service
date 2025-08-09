@@ -8,15 +8,19 @@
         <div class="row align-items-center">
             <div class="col-md-6">
                 <h1 class="display-4 fw-bold">Cable Service Management</h1>
-                <p class="lead">Complete solution for managing cable and network services</p>
+                <p class="lead mb-4">Complete solution for managing cable and network services with customer management, payment tracking, and service monitoring.</p>
                 <div class="mt-4">
-                    <a href="/login" class="btn btn-light btn-lg me-3">Seller Login</a>
-                    <a href="/packages" class="btn btn-outline-light btn-lg">View Packages</a>
+                    <a href="/login" class="btn btn-light btn-lg me-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>Seller Login
+                    </a>
+                    <a href="#packages" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-box me-2"></i>View Packages
+                    </a>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="text-center">
-                    <i class="fas fa-tv fa-10x opacity-75"></i>
+                    <i class="fas fa-tv" style="font-size: 8rem; opacity: 0.8;"></i>
                 </div>
             </div>
         </div>
@@ -24,13 +28,20 @@
 </div>
 
 <div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h2>Why Choose Our Cable Service?</h2>
+            <p class="text-muted">Professional management system for cable service providers</p>
+        </div>
+    </div>
+    
     <div class="row">
         <div class="col-md-4 mb-4">
             <div class="card h-100 text-center">
                 <div class="card-body">
                     <i class="fas fa-users fa-3x text-primary mb-3"></i>
                     <h5>Customer Management</h5>
-                    <p>Easy customer profile creation and management system</p>
+                    <p class="text-muted">Easy customer profile creation and management system with detailed tracking</p>
                 </div>
             </div>
         </div>
@@ -39,7 +50,7 @@
                 <div class="card-body">
                     <i class="fas fa-credit-card fa-3x text-success mb-3"></i>
                     <h5>Payment Tracking</h5>
-                    <p>Complete payment recording and status tracking</p>
+                    <p class="text-muted">Complete payment recording and status tracking with multiple payment modes</p>
                 </div>
             </div>
         </div>
@@ -47,48 +58,63 @@
             <div class="card h-100 text-center">
                 <div class="card-body">
                     <i class="fas fa-chart-line fa-3x text-info mb-3"></i>
-                    <h5>Service Status</h5>
-                    <p>Real-time service activation and status monitoring</p>
+                    <h5>Service Monitoring</h5>
+                    <p class="text-muted">Real-time service activation and status monitoring with automated updates</p>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="row mt-5">
+    <div class="row mt-5" id="packages">
         <div class="col-12 text-center">
-            <h2>Available Packages</h2>
+            <h2>Our Entertainment Packages</h2>
             <p class="text-muted">Choose from our variety of entertainment packages</p>
         </div>
     </div>
     
     <div class="row">
+        {% if packages %}
         {% for package in packages %}
         <div class="col-md-3 mb-4">
             <div class="card h-100">
                 <div class="card-header text-center">
-                    <h5>{{ package.package_name }}</h5>
+                    <h5><i class="fas fa-tv me-2"></i>{{ package.package_name }}</h5>
                 </div>
                 <div class="card-body text-center">
-                    <h3 class="text-primary">${{ package.price }}</h3>
-                    <p>{{ package.description or 'Premium entertainment package' }}</p>
+                    <h3 class="text-primary mb-3">
+                        <i class="fas fa-dollar-sign"></i>{{ "%.2f"|format(package.price) }}
+                        <small class="text-muted">/month</small>
+                    </h3>
+                    <p class="text-muted">{{ package.description or 'Premium entertainment package' }}</p>
                     <small class="text-muted">
                         {% if package.channels %}
-                            {{ package.channels.split('\n')|length }} channels
+                            <i class="fas fa-list me-1"></i>{{ package.channels.split('\n')|length }} channels included
                         {% endif %}
                     </small>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="/login" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-info-circle me-1"></i>More Details
+                    </a>
                 </div>
             </div>
         </div>
         {% endfor %}
+        {% else %}
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-box fa-4x text-muted mb-3"></i>
+                    <h4>Packages Coming Soon</h4>
+                    <p class="text-muted">We're preparing exciting entertainment packages for you!</p>
+                    <a href="/login" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login to Manage
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>
 
-<style>
-.hero-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-.fa-10x {
-    font-size: 10em;
-}
-</style>
 {% endblock %}
