@@ -575,6 +575,11 @@
                             <i class="fas fa-user-plus me-1"></i>Add Customer
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/status">
+                            <i class="fas fa-signal me-1"></i>Status
+                        </a>
+                    </li>
                     {% endif %}
                 </ul>
                 <ul class="navbar-nav">
@@ -592,7 +597,7 @@
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="/app"><i class="fas fa-desktop me-2"></i>Admin Desk</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/api/method/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="handleLogout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                         </ul>
                     </li>
                     {% endif %}
@@ -667,6 +672,31 @@
                 }
             });
         });
+        
+        // Handle logout
+        window.handleLogout = function() {
+            if (confirm('Are you sure you want to logout?')) {
+                fetch('/api/method/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    showToast('Logged out successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1000);
+                })
+                .catch(error => {
+                    console.error('Logout error:', error);
+                    // Force redirect even if API fails
+                    window.location.href = '/login';
+                });
+            }
+        };
     </script>
     
     {% block page_scripts %}{% endblock %}

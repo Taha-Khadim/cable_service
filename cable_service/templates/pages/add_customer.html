@@ -360,7 +360,23 @@ document.getElementById('customerForm').addEventListener('submit', function(e) {
         },
         error: function(r) {
             setLoading(submitBtn, false);
-            const errorMsg = r.message || 'Error creating customer';
+            let errorMsg = 'Error creating customer';
+            if (r && r.exc) {
+                // Parse Frappe error message
+                try {
+                    const errorLines = r.exc.split('\n');
+                    const meaningfulError = errorLines.find(line => 
+                        line.includes('ValidationError') || 
+                        line.includes('DuplicateEntryError') ||
+                        line.includes('must be')
+                    );
+                    if (meaningfulError) {
+                        errorMsg = meaningfulError.split(':').pop().trim();
+                    }
+                } catch (e) {
+                    console.error('Error parsing:', e);
+                }
+            }
             showToast(errorMsg, 'danger');
         }
     });

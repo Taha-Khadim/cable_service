@@ -18,10 +18,17 @@
                         real-time payment tracking, and intelligent service monitoring.
                     </p>
                     <div class="d-flex flex-wrap gap-3 mb-5">
+                        {% if frappe.session.user == "Guest" %}
                         <a href="/login" class="btn btn-light btn-lg px-5 py-3">
                             <i class="fas fa-sign-in-alt me-2"></i>
-                            Seller Portal
+                            Login to Manage
                         </a>
+                        {% else %}
+                        <a href="/dashboard" class="btn btn-light btn-lg px-5 py-3">
+                            <i class="fas fa-tachometer-alt me-2"></i>
+                            Go to Dashboard
+                        </a>
+                        {% endif %}
                         <a href="#features" class="btn btn-outline-light btn-lg px-5 py-3">
                             <i class="fas fa-play me-2"></i>
                             Learn More
@@ -198,10 +205,17 @@
                         {% endif %}
                     </div>
                     <div class="card-footer bg-white border-0 text-center">
+                        {% if frappe.session.user == "Guest" %}
                         <a href="/login" class="btn btn-outline-primary w-100">
                             <i class="fas fa-info-circle me-2"></i>
-                            View Details
+                            Login to Subscribe
                         </a>
+                        {% else %}
+                        <a href="/add-customer" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-user-plus me-2"></i>
+                            Add Customer
+                        </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -215,10 +229,17 @@
                         </div>
                         <h4 class="fw-bold mb-3">Packages Coming Soon</h4>
                         <p class="text-muted mb-4 fs-5">We're preparing exciting entertainment packages for you!</p>
+                        {% if frappe.session.user == "Guest" %}
                         <a href="/login" class="btn btn-primary btn-lg px-5">
                             <i class="fas fa-sign-in-alt me-2"></i>
                             Access Management Portal
                         </a>
+                        {% else %}
+                        <a href="/packages" class="btn btn-primary btn-lg px-5">
+                            <i class="fas fa-plus me-2"></i>
+                            Create Packages
+                        </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -236,10 +257,17 @@
                     <h2 class="display-6 fw-bold mb-4">Ready to Get Started?</h2>
                     <p class="lead mb-5 opacity-90 fs-5">Join thousands of cable service providers who trust our platform</p>
                     <div class="d-flex flex-wrap justify-content-center gap-3">
+                        {% if frappe.session.user == "Guest" %}
                         <a href="/login" class="btn btn-light btn-lg px-5 py-3">
                             <i class="fas fa-rocket me-2"></i>
                             Start Managing
                         </a>
+                        {% else %}
+                        <a href="/dashboard" class="btn btn-light btn-lg px-5 py-3">
+                            <i class="fas fa-tachometer-alt me-2"></i>
+                            Go to Dashboard
+                        </a>
+                        {% endif %}
                         <a href="#features" class="btn btn-outline-light btn-lg px-5 py-3">
                             <i class="fas fa-question-circle me-2"></i>
                             Learn More
