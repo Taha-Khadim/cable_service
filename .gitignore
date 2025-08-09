@@ -5,3 +5,4 @@
 tags
 cable_service/docs/current
 node_modules/
+.env
