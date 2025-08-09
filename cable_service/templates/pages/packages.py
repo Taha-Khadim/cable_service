@@ -5,9 +5,19 @@ def get_context(context):
         frappe.local.flags.redirect_location = "/login"
         raise frappe.Redirect
     
-    context.packages = frappe.get_all('Package',
-        fields=['name', 'package_name', 'description', 'price', 'channels', 'is_active'],
-        order_by='package_name'
-    )
+    # Check if table exists before querying
+    try:
+        if frappe.db.table_exists('Package'):
+            context.packages = frappe.get_all('Package',
+                fields=['name', 'package_name', 'description', 'price', 'channels', 'is_active'],
+                order_by='package_name'
+            )
+        else:
+            context.packages = []
+            context.needs_setup = True
+    except Exception as e:
+        frappe.log_error(f"Packages error: {str(e)}")
+        context.packages = []
+        context.needs_setup = True
     
     return context
