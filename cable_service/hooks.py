@@ -5,6 +5,19 @@ app_description = "Cable service manager"
 app_email = "lumoracode@gmail.com"
 app_license = "MIT"
 
+# Required for proper installation
+required_apps = ["frappe"]
+
+# Fixtures
+fixtures = [
+	{
+		"doctype": "Role",
+		"filters": [
+			["name", "in", ["Cable Service Manager"]]
+		]
+	}
+]
+
 # Includes in <head>
 # ------------------
 

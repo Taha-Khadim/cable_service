@@ -1,0 +1,78 @@
+{% extends "templates/web.html" %}
+
+{% block title %}Setup Guide - Cable Service{% endblock %}
+
+{% block page_content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3><i class="fas fa-cog"></i> Cable Service Setup Guide</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h5><i class="fas fa-info-circle"></i> Initial Setup Required</h5>
+                        <p>Follow these steps to set up your Cable Service Management system:</p>
+                    </div>
+                    
+                    <div class="setup-steps">
+                        <div class="step mb-4">
+                            <h5><span class="badge bg-primary me-2">1</span>Install the App</h5>
+                            <p>Run this command in your terminal:</p>
+                            <div class="bg-dark text-light p-3 rounded">
+                                <code>bench --site [your-site-name] install-app cable_service</code>
+                            </div>
+                        </div>
+                        
+                        <div class="step mb-4">
+                            <h5><span class="badge bg-primary me-2">2</span>Migrate Database</h5>
+                            <p>Create the database tables:</p>
+                            <div class="bg-dark text-light p-3 rounded">
+                                <code>bench --site [your-site-name] migrate</code>
+                            </div>
+                        </div>
+                        
+                        <div class="step mb-4">
+                            <h5><span class="badge bg-primary me-2">3</span>Create Sample Data</h5>
+                            <p>After migration, create some sample packages:</p>
+                            <ul>
+                                <li><strong>News Package</strong> - $15/month</li>
+                                <li><strong>Sports Package</strong> - $25/month</li>
+                                <li><strong>Kids Package</strong> - $10/month</li>
+                                <li><strong>All-in-One Package</strong> - $45/month</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="step mb-4">
+                            <h5><span class="badge bg-primary me-2">4</span>Access the System</h5>
+                            <p>Once setup is complete:</p>
+                            <ul>
+                                <li>Visit <code>/login</code> for seller/admin access</li>
+                                <li>Use Administrator/admin for initial login</li>
+                                <li>Access the dashboard at <code>/dashboard</code></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-success">
+                        <h6><i class="fas fa-check-circle"></i> After Setup</h6>
+                        <p class="mb-0">Your system will include:</p>
+                        <ul class="mb-0">
+                            <li>Package management</li>
+                            <li>Customer registration</li>
+                            <li>Payment tracking</li>
+                            <li>Service status management</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="/dashboard" class="btn btn-primary">Go to Dashboard</a>
+                        <a href="/" class="btn btn-outline-secondary">Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
