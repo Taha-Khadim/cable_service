@@ -1,0 +1,151 @@
+{% extends "templates/web.html" %}
+
+{% block title %}Package Management{% endblock %}
+
+{% block page_content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Package Management</h2>
+                <div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPackageModal">
+                        Add New Package
+                    </button>
+                    <a href="/dashboard" class="btn btn-outline-secondary">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        {% for package in packages %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">{{ package.package_name }}</h5>
+                    <span class="badge bg-{{ 'success' if package.is_active else 'secondary' }}">
+                        {{ 'Active' if package.is_active else 'Inactive' }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <h4 class="text-primary">${{ package.price }}</h4>
+                    <p class="card-text">{{ package.description or 'No description available' }}</p>
+                    <div class="mb-3">
+                        <strong>Channels:</strong>
+                        <div class="mt-2">
+                            {% if package.channels %}
+                                {% for channel in package.channels.split('\n') %}
+                                    {% if channel.strip() %}
+                                        <span class="badge bg-light text-dark me-1 mb-1">{{ channel.strip() }}</span>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <small class="text-muted">No channels listed</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-sm btn-outline-primary" onclick="editPackage('{{ package.name }}')">
+                        Edit
+                    </button>
+                    <button class="btn btn-sm btn-outline-{{ 'danger' if package.is_active else 'success' }}" 
+                            onclick="togglePackage('{{ package.name }}', {{ package.is_active|int }})">
+                        {{ 'Deactivate' if package.is_active else 'Activate' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Add Package Modal -->
+<div class="modal fade" id="addPackageModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Package</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="packageForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Package Name</label>
+                        <input type="text" class="form-control" name="package_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Price</label>
+                        <input type="number" class="form-control" name="price" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Channels (one per line)</label>
+                        <textarea class="form-control" name="channels" rows="5" 
+                                  placeholder="CNN&#10;ESPN&#10;Discovery&#10;National Geographic"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="is_active" checked>
+                            <label class="form-check-label">Active</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Package</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('packageForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = {
+        doctype: 'Package',
+        package_name: formData.get('package_name'),
+        description: formData.get('description'),
+        price: parseFloat(formData.get('price')),
+        channels: formData.get('channels'),
+        is_active: formData.get('is_active') ? 1 : 0
+    };
+    
+    frappe.call({
+        method: 'frappe.client.insert',
+        args: {
+            doc: data
+        },
+        callback: function(r) {
+            if (r.message) {
+                location.reload();
+            }
+        }
+    });
+});
+
+function togglePackage(packageName, isActive) {
+    frappe.call({
+        method: 'frappe.client.set_value',
+        args: {
+            doctype: 'Package',
+            name: packageName,
+            fieldname: 'is_active',
+            value: isActive ? 0 : 1
+        },
+        callback: function(r) {
+            if (r.message) {
+                location.reload();
+            }
+        }
+    });
+}
+</script>
+{% endblock %}

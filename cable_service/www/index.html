@@ -1,0 +1,94 @@
+{% extends "templates/web.html" %}
+
+{% block title %}Cable Service Management{% endblock %}
+
+{% block page_content %}
+<div class="hero-section bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="display-4 fw-bold">Cable Service Management</h1>
+                <p class="lead">Complete solution for managing cable and network services</p>
+                <div class="mt-4">
+                    <a href="/login" class="btn btn-light btn-lg me-3">Seller Login</a>
+                    <a href="/packages" class="btn btn-outline-light btn-lg">View Packages</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-center">
+                    <i class="fas fa-tv fa-10x opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                    <h5>Customer Management</h5>
+                    <p>Easy customer profile creation and management system</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-credit-card fa-3x text-success mb-3"></i>
+                    <h5>Payment Tracking</h5>
+                    <p>Complete payment recording and status tracking</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-chart-line fa-3x text-info mb-3"></i>
+                    <h5>Service Status</h5>
+                    <p>Real-time service activation and status monitoring</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <h2>Available Packages</h2>
+            <p class="text-muted">Choose from our variety of entertainment packages</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        {% for package in packages %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <div class="card-header text-center">
+                    <h5>{{ package.package_name }}</h5>
+                </div>
+                <div class="card-body text-center">
+                    <h3 class="text-primary">${{ package.price }}</h3>
+                    <p>{{ package.description or 'Premium entertainment package' }}</p>
+                    <small class="text-muted">
+                        {% if package.channels %}
+                            {{ package.channels.split('\n')|length }} channels
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.fa-10x {
+    font-size: 10em;
+}
+</style>
+{% endblock %}
