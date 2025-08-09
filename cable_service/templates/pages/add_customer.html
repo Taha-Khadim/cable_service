@@ -1,0 +1,386 @@
+{% extends "templates/web.html" %}
+
+{% block title %}Add Customer - Cable Service{% endblock %}
+
+{% block page_content %}
+<div class="container section-padding">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <h1 class="fw-bold mb-2">
+                        <i class="fas fa-user-plus me-3"></i>Add New Customer
+                    </h1>
+                    <p class="text-muted mb-0 fs-5">Register a new customer and assign packages</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="/customers" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Customers
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if needs_setup %}
+    <!-- Setup Alert -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="alert alert-warning">
+                <div class="d-flex align-items-start">
+                    <i class="fas fa-exclamation-triangle fa-2x me-3 mt-1"></i>
+                    <div>
+                        <h5 class="alert-heading fw-bold">Setup Required</h5>
+                        <p class="mb-3">The database tables need to be created. Please run the following commands:</p>
+                        <div class="bg-dark text-light p-3 rounded mb-3">
+                            <code>
+                                bench --site [your-site-name] migrate<br>
+                                bench --site [your-site-name] install-app cable_service
+                            </code>
+                        </div>
+                        <p class="mb-0">After running these commands, refresh this page.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    
+    <!-- Customer Form -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <form id="customerForm">
+                <!-- Customer Details -->
+                <div class="card-modern mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0 fw-bold">
+                            <i class="fas fa-user me-2"></i>Customer Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Customer Name *</label>
+                                <input type="text" class="form-control" name="customer_name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone Number *</label>
+                                <input type="tel" class="form-control" name="phone" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" name="email">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">CNIC *</label>
+                                <input type="text" class="form-control" name="cnic" maxlength="13" required>
+                                <small class="text-muted">13 digits without dashes</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">City</label>
+                                <input type="text" class="form-control" name="city">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Address *</label>
+                                <textarea class="form-control" name="address" rows="3" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Package Selection -->
+                <div class="card-modern mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0 fw-bold">
+                            <i class="fas fa-box me-2"></i>Package Selection
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% if packages %}
+                        <div class="row g-3" id="packageSelection">
+                            {% for package in packages %}
+                            <div class="col-md-6">
+                                <div class="card border-2 package-card" data-package-id="{{ package.name }}" data-package-price="{{ package.price }}">
+                                    <div class="card-body">
+                                        <div class="form-check">
+                                            <input class="form-check-input package-checkbox" type="checkbox" 
+                                                   name="packages" value="{{ package.name }}" 
+                                                   id="package_{{ loop.index }}">
+                                            <label class="form-check-label w-100" for="package_{{ loop.index }}">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <div>
+                                                        <h6 class="fw-bold mb-1">{{ package.package_name }}</h6>
+                                                        <p class="text-muted mb-2 small">{{ package.description or 'Premium entertainment package' }}</p>
+                                                        {% if package.channels %}
+                                                        <div class="mb-2">
+                                                            {% for channel in package.channels.split('\n')[:3] %}
+                                                                {% if channel.strip() %}
+                                                                    <span class="badge bg-secondary me-1 mb-1 small">{{ channel.strip() }}</span>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                            {% if package.channels.split('\n')|length > 3 %}
+                                                                <span class="badge bg-primary small">+{{ package.channels.split('\n')|length - 3 }} more</span>
+                                                            {% endif %}
+                                                        </div>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <div class="fw-bold text-primary fs-5">${{ "%.0f"|format(package.price) }}</div>
+                                                        <small class="text-muted">/month</small>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Total Amount -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-0 fw-bold">Total Monthly Amount:</h6>
+                                            <h4 class="mb-0 fw-bold text-primary" id="totalAmount">$0.00</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-box fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted">No packages available</h6>
+                            <p class="text-muted mb-3">Please create some packages first</p>
+                            <a href="/packages" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Create Packages
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Payment Information -->
+                {% if packages %}
+                <div class="card-modern mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0 fw-bold">
+                            <i class="fas fa-credit-card me-2"></i>Payment Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Payment Amount</label>
+                                <input type="number" class="form-control" name="payment_amount" step="0.01" min="0">
+                                <small class="text-muted">Leave empty if no payment received yet</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Payment Mode</label>
+                                <select class="form-control" name="payment_mode">
+                                    <option value="Cash">Cash</option>
+                                    <option value="Bank Transfer">Bank Transfer</option>
+                                    <option value="Card">Card</option>
+                                    <option value="Online">Online</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Payment Status</label>
+                                <select class="form-control" name="payment_status">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Paid">Paid</option>
+                                    <option value="Partial">Partial</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Payment Date</label>
+                                <input type="date" class="form-control" name="payment_date">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="card-modern">
+                    <div class="card-body text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="fas fa-save me-2"></i>Create Customer
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-lg px-5 ms-3" onclick="resetForm()">
+                            <i class="fas fa-undo me-2"></i>Reset Form
+                        </button>
+                    </div>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<script>
+// Package selection and total calculation
+document.addEventListener('DOMContentLoaded', function() {
+    const packageCheckboxes = document.querySelectorAll('.package-checkbox');
+    const totalAmountElement = document.getElementById('totalAmount');
+    
+    packageCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const card = this.closest('.package-card');
+            if (this.checked) {
+                card.classList.add('border-primary');
+                card.style.backgroundColor = 'rgba(0, 0, 0, 0.02)';
+            } else {
+                card.classList.remove('border-primary');
+                card.style.backgroundColor = '';
+            }
+            calculateTotal();
+        });
+    });
+    
+    function calculateTotal() {
+        let total = 0;
+        packageCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                const price = parseFloat(checkbox.closest('.package-card').dataset.packagePrice);
+                total += price;
+            }
+        });
+        totalAmountElement.textContent = '$' + total.toFixed(2);
+        
+        // Update payment amount if empty
+        const paymentAmountInput = document.querySelector('[name="payment_amount"]');
+        if (paymentAmountInput && !paymentAmountInput.value) {
+            paymentAmountInput.value = total.toFixed(2);
+        }
+    }
+    
+    // Set default payment date to today
+    const paymentDateInput = document.querySelector('[name="payment_date"]');
+    if (paymentDateInput) {
+        paymentDateInput.value = new Date().toISOString().split('T')[0];
+    }
+});
+
+// CNIC validation
+document.querySelector('[name="cnic"]').addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, ''); // Only allow digits
+    if (this.value.length > 13) {
+        this.value = this.value.slice(0, 13);
+    }
+});
+
+// Form submission
+document.getElementById('customerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const submitBtn = this.querySelector('button[type="submit"]');
+    setLoading(submitBtn, true);
+    
+    const formData = new FormData(this);
+    
+    // Validate required fields
+    const requiredFields = ['customer_name', 'phone', 'cnic', 'address'];
+    for (let field of requiredFields) {
+        if (!formData.get(field)) {
+            showToast(`Please fill in the ${field.replace('_', ' ')}`, 'danger');
+            setLoading(submitBtn, false);
+            return;
+        }
+    }
+    
+    // Validate CNIC
+    const cnic = formData.get('cnic');
+    if (cnic.length !== 13) {
+        showToast('CNIC must be exactly 13 digits', 'danger');
+        setLoading(submitBtn, false);
+        return;
+    }
+    
+    // Get selected packages
+    const selectedPackages = [];
+    document.querySelectorAll('.package-checkbox:checked').forEach(checkbox => {
+        const packageCard = checkbox.closest('.package-card');
+        selectedPackages.push({
+            package: checkbox.value,
+            package_name: packageCard.querySelector('h6').textContent,
+            price: parseFloat(packageCard.dataset.packagePrice)
+        });
+    });
+    
+    if (selectedPackages.length === 0) {
+        showToast('Please select at least one package', 'danger');
+        setLoading(submitBtn, false);
+        return;
+    }
+    
+    // Calculate total amount
+    const totalAmount = selectedPackages.reduce((sum, pkg) => sum + pkg.price, 0);
+    
+    // Prepare customer data
+    const customerData = {
+        doctype: 'Customer Profile',
+        customer_name: formData.get('customer_name'),
+        phone: formData.get('phone'),
+        email: formData.get('email'),
+        cnic: formData.get('cnic'),
+        city: formData.get('city'),
+        address: formData.get('address'),
+        selected_packages: selectedPackages,
+        total_amount: totalAmount,
+        payment_amount: parseFloat(formData.get('payment_amount')) || 0,
+        payment_mode: formData.get('payment_mode'),
+        payment_status: formData.get('payment_status'),
+        payment_date: formData.get('payment_date'),
+        created_by: '{{ frappe.session.user }}'
+    };
+    
+    // Submit to Frappe
+    frappe.call({
+        method: 'frappe.client.insert',
+        args: {
+            doc: customerData
+        },
+        callback: function(r) {
+            setLoading(submitBtn, false);
+            if (r.message) {
+                showToast('Customer created successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = '/customers';
+                }, 2000);
+            } else {
+                showToast('Failed to create customer', 'danger');
+            }
+        },
+        error: function(r) {
+            setLoading(submitBtn, false);
+            const errorMsg = r.message || 'Error creating customer';
+            showToast(errorMsg, 'danger');
+        }
+    });
+});
+
+function resetForm() {
+    document.getElementById('customerForm').reset();
+    document.querySelectorAll('.package-card').forEach(card => {
+        card.classList.remove('border-primary');
+        card.style.backgroundColor = '';
+    });
+    document.getElementById('totalAmount').textContent = '$0.00';
+    
+    // Reset payment date to today
+    const paymentDateInput = document.querySelector('[name="payment_date"]');
+    if (paymentDateInput) {
+        paymentDateInput.value = new Date().toISOString().split('T')[0];
+    }
+    
+    showToast('Form reset successfully', 'info');
+}
+</script>
+{% endblock %}
