@@ -3,14 +3,13 @@
 {% block title %}Cable Service Dashboard{% endblock %}
 
 {% block page_content %}
-<div class="container-fluid mt-4">
+<div class="container mt-4">
     <div class="row">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Cable Service Dashboard</h2>
+                <h2><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h2>
                 <div>
-                    <span class="badge bg-success me-2">Welcome, {{ frappe.session.user }}</span>
-                    <a href="/api/method/logout" class="btn btn-outline-danger btn-sm">Logout</a>
+                    <span class="badge bg-primary me-2">Welcome, {{ frappe.session.user }}</span>
                 </div>
             </div>
         </div>
@@ -36,34 +35,62 @@
     
     <div class="row mb-4">
         <div class="col-md-3">
-            <div class="card bg-primary text-white">
+            <div class="card stats-card primary bg-white">
                 <div class="card-body">
-                    <h5>Total Customers</h5>
-                    <h3>{{ stats.total_customers }}</h3>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1">Total Customers</h6>
+                            <h3 class="mb-0 text-primary">{{ stats.total_customers }}</h3>
+                        </div>
+                        <div class="text-primary">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-success text-white">
+            <div class="card stats-card success bg-white">
                 <div class="card-body">
-                    <h5>Active Services</h5>
-                    <h3>{{ stats.active_customers }}</h3>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1">Active Services</h6>
+                            <h3 class="mb-0 text-success">{{ stats.active_customers }}</h3>
+                        </div>
+                        <div class="text-success">
+                            <i class="fas fa-check-circle fa-2x"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-warning text-white">
+            <div class="card stats-card warning bg-white">
                 <div class="card-body">
-                    <h5>Pending Payments</h5>
-                    <h3>{{ stats.pending_payments }}</h3>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1">Pending Payments</h6>
+                            <h3 class="mb-0 text-warning">{{ stats.pending_payments }}</h3>
+                        </div>
+                        <div class="text-warning">
+                            <i class="fas fa-clock fa-2x"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-info text-white">
+            <div class="card stats-card info bg-white">
                 <div class="card-body">
-                    <h5>Total Revenue</h5>
-                    <h3>${{ stats.total_revenue }}</h3>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1">Total Revenue</h6>
+                            <h3 class="mb-0 text-info">${{ "%.2f"|format(stats.total_revenue) }}</h3>
+                        </div>
+                        <div class="text-info">
+                            <i class="fas fa-dollar-sign fa-2x"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -73,14 +100,22 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5>Quick Actions</h5>
+                    <h5><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="/app/package" class="btn btn-outline-primary">Manage Packages</a>
-                        <a href="/app/customer-profile/new" class="btn btn-outline-success">Add New Customer</a>
-                        <a href="/app/customer-profile" class="btn btn-outline-info">View All Customers</a>
-                        <a href="/customer-list" class="btn btn-outline-warning">Customer Web View</a>
+                        <a href="/packages" class="btn btn-outline-primary">
+                            <i class="fas fa-box me-2"></i>Manage Packages
+                        </a>
+                        <a href="/app/customer-profile/new" class="btn btn-outline-success">
+                            <i class="fas fa-user-plus me-2"></i>Add New Customer
+                        </a>
+                        <a href="/customer-list" class="btn btn-outline-info">
+                            <i class="fas fa-list me-2"></i>View All Customers
+                        </a>
+                        <a href="/app" class="btn btn-outline-secondary">
+                            <i class="fas fa-desktop me-2"></i>Admin Desk
+                        </a>
                     </div>
                 </div>
             </div>
@@ -88,7 +123,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5>Recent Customers</h5>
+                    <h5><i class="fas fa-history me-2"></i>Recent Customers</h5>
                 </div>
                 <div class="card-body">
                     {% if recent_customers %}
@@ -106,12 +141,12 @@
                                 <tr>
                                     <td>{{ customer.customer_name }}</td>
                                     <td>
-                                        <span class="badge bg-{{ 'success' if customer.service_status == 'Active' else 'warning' if customer.service_status == 'Pending' else 'danger' }}">
+                                        <span class="badge bg-{{ 'success' if customer.service_status == 'Active' else 'warning' if customer.service_status == 'Pending' else 'secondary' }}">
                                             {{ customer.service_status }}
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="badge bg-{{ 'success' if customer.payment_status == 'Paid' else 'warning' }}">
+                                        <span class="badge bg-{{ 'success' if customer.payment_status == 'Paid' else 'warning' if customer.payment_status == 'Pending' else 'info' }}">
                                             {{ customer.payment_status }}
                                         </span>
                                     </td>
@@ -123,6 +158,11 @@
                     {% else %}
                     <p class="text-muted">No customers yet. Start by adding some packages and customers!</p>
                     {% endif %}
+                    {% if recent_customers %}
+                    <div class="text-center mt-3">
+                        <a href="/customer-list" class="btn btn-sm btn-outline-primary">View All Customers</a>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -133,17 +173,17 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Getting Started</h5>
+                    <h5><i class="fas fa-rocket me-2"></i>Getting Started</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <h6>1. Create Packages</h6>
+                            <h6><i class="fas fa-box text-primary me-2"></i>1. Create Packages</h6>
                             <p>Start by creating entertainment packages (News, Sports, Kids, All-in-One)</p>
-                            <a href="/app/package/new" class="btn btn-sm btn-primary">Create Package</a>
+                            <a href="/packages" class="btn btn-sm btn-primary">Manage Packages</a>
                         </div>
                         <div class="col-md-6">
-                            <h6>2. Add Customers</h6>
+                            <h6><i class="fas fa-user-plus text-success me-2"></i>2. Add Customers</h6>
                             <p>Register customers and assign packages to them</p>
                             <a href="/app/customer-profile/new" class="btn btn-sm btn-success">Add Customer</a>
                         </div>
