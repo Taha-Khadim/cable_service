@@ -1,48 +1,65 @@
 {% extends "templates/web.html" %}
 
-{% block title %}Cable Service Login{% endblock %}
+{% block title %}Login - Cable Service{% endblock %}
 
 {% block page_content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-4">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white text-center">
-                    <h3><i class="fas fa-tv me-2"></i>Cable Service</h3>
-                    <p class="mb-0">Seller/Admin Portal</p>
-                </div>
-                <div class="card-body">
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="min-height: calc(100vh - 160px);">
+        <div class="col-md-5 col-lg-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <div class="stats-icon mx-auto mb-3" style="background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));">
+                            <i class="fas fa-tv"></i>
+                        </div>
+                        <h2 class="fw-bold mb-1">Welcome Back</h2>
+                        <p class="text-muted">Sign in to your Cable Service account</p>
+                    </div>
+                    
                     <div id="loginAlert" class="alert alert-danger d-none" role="alert">
                         <i class="fas fa-exclamation-triangle me-2"></i>
-                        <span id="loginErrorMsg">Invalid credentials</span>
+                        <span id="loginErrorMsg">Invalid username or password</span>
                     </div>
+                    
                     <form id="login-form">
                         <div class="mb-3">
-                            <label for="usr" class="form-label">Username/Email</label>
+                            <label for="usr" class="form-label">Username or Email</label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                <input type="text" class="form-control" id="usr" name="usr" required>
+                                <span class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <input type="text" class="form-control" id="usr" name="usr" 
+                                       placeholder="Enter your username" required autocomplete="username">
                             </div>
                         </div>
-                        <div class="mb-3">
+                        
+                        <div class="mb-4">
                             <label for="pwd" class="form-label">Password</label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                <input type="password" class="form-control" id="pwd" name="pwd" required>
+                                <span class="input-group-text">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" class="form-control" id="pwd" name="pwd" 
+                                       placeholder="Enter your password" required autocomplete="current-password">
                             </div>
                         </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary" id="loginBtn">
-                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                        
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg" id="loginBtn">
+                                <i class="fas fa-sign-in-alt me-2"></i>
+                                Sign In
                             </button>
                         </div>
                     </form>
-                    <div class="mt-3 text-center">
-                        <div class="alert alert-info">
-                            <small>
-                                <i class="fas fa-info-circle me-1"></i>
-                                Default Login: <strong>Administrator</strong> / <strong>admin</strong>
-                            </small>
+                    
+                    <div class="alert alert-info">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <div>
+                                <small class="fw-medium">Default Credentials:</small><br>
+                                <small><strong>Username:</strong> Administrator</small><br>
+                                <small><strong>Password:</strong> admin</small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -52,41 +69,69 @@
 </div>
 
 <script>
-document.getElementById('login-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('login-form');
     const loginBtn = document.getElementById('loginBtn');
     const loginAlert = document.getElementById('loginAlert');
+    const loginErrorMsg = document.getElementById('loginErrorMsg');
     
-    // Show loading state
-    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Logging in...';
-    loginBtn.disabled = true;
-    loginAlert.classList.add('d-none');
-    
-    const formData = new FormData(this);
-    
-    frappe.call({
-        method: 'login',
-        args: {
-            usr: formData.get('usr'),
-            pwd: formData.get('pwd')
-        },
-        callback: function(r) {
-            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Login';
-            loginBtn.disabled = false;
-            
-            if (r.message === 'Logged In') {
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Show loading state
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Signing in...';
+        loginBtn.disabled = true;
+        loginAlert.classList.add('d-none');
+        
+        const formData = new FormData(this);
+        const username = formData.get('usr');
+        const password = formData.get('pwd');
+        
+        // Use fetch instead of frappe.call for better compatibility
+        fetch('/api/method/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                usr: username,
+                pwd: password
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Logged In' || data.message === 'Success') {
+                // Success - redirect to dashboard
                 window.location.href = '/dashboard';
             } else {
-                loginAlert.classList.remove('d-none');
+                // Login failed
+                showError('Invalid username or password. Please try again.');
             }
-        },
-        error: function() {
-            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Login';
+        })
+        .catch(error => {
+            console.error('Login error:', error);
+            showError('Login failed. Please check your connection and try again.');
+        })
+        .finally(() => {
+            // Reset button state
+            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Sign In';
             loginBtn.disabled = false;
-            loginAlert.classList.remove('d-none');
-        }
+        });
     });
+    
+    function showError(message) {
+        loginErrorMsg.textContent = message;
+        loginAlert.classList.remove('d-none');
+        
+        // Auto-hide error after 5 seconds
+        setTimeout(() => {
+            loginAlert.classList.add('d-none');
+        }, 5000);
+    }
+    
+    // Focus on username field
+    document.getElementById('usr').focus();
 });
 </script>
 {% endblock %}

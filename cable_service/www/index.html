@@ -1,120 +1,214 @@
 {% extends "templates/web.html" %}
 
-{% block title %}Cable Service Management{% endblock %}
+{% block title %}Cable Service Management System{% endblock %}
 
 {% block page_content %}
-<div class="hero-section bg-primary text-white py-5">
+<!-- Hero Section -->
+<div class="hero-section text-white py-5">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <h1 class="display-4 fw-bold">Cable Service Management</h1>
-                <p class="lead mb-4">Complete solution for managing cable and network services with customer management, payment tracking, and service monitoring.</p>
-                <div class="mt-4">
-                    <a href="/login" class="btn btn-light btn-lg me-3">
-                        <i class="fas fa-sign-in-alt me-2"></i>Seller Login
-                    </a>
-                    <a href="#packages" class="btn btn-outline-light btn-lg">
-                        <i class="fas fa-box me-2"></i>View Packages
-                    </a>
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6">
+                <div class="position-relative z-index-2">
+                    <h1 class="display-3 fw-bold mb-4">
+                        Modern Cable Service
+                        <span class="d-block text-warning">Management</span>
+                    </h1>
+                    <p class="lead mb-4 opacity-90">
+                        Complete solution for managing cable and network services with advanced customer management, 
+                        real-time payment tracking, and intelligent service monitoring.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 mb-4">
+                        <a href="/login" class="btn btn-light btn-lg px-4">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Seller Portal
+                        </a>
+                        <a href="#features" class="btn btn-outline-light btn-lg px-4">
+                            <i class="fas fa-play me-2"></i>
+                            Learn More
+                        </a>
+                    </div>
+                    <div class="d-flex align-items-center gap-4 text-sm opacity-75">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Real-time Tracking
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-shield-alt me-2"></i>
+                            Secure Payments
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-mobile-alt me-2"></i>
+                            Mobile Ready
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="text-center">
-                    <i class="fas fa-tv" style="font-size: 8rem; opacity: 0.8;"></i>
+            <div class="col-lg-6">
+                <div class="text-center position-relative">
+                    <div class="position-relative d-inline-block">
+                        <i class="fas fa-tv display-1 opacity-75"></i>
+                        <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                            <div class="bg-white bg-opacity-10 rounded-circle p-4">
+                                <i class="fas fa-signal text-warning fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="container py-5">
+<!-- Features Section -->
+<div class="container py-5" id="features">
     <div class="row mb-5">
         <div class="col-12 text-center">
-            <h2>Why Choose Our Cable Service?</h2>
-            <p class="text-muted">Professional management system for cable service providers</p>
+            <h2 class="display-5 fw-bold mb-3">Why Choose Our Platform?</h2>
+            <p class="lead text-muted">Professional management system designed for modern cable service providers</p>
         </div>
     </div>
     
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 text-center">
-                <div class="card-body">
-                    <i class="fas fa-users fa-3x text-primary mb-3"></i>
-                    <h5>Customer Management</h5>
-                    <p class="text-muted">Easy customer profile creation and management system with detailed tracking</p>
+    <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="stats-icon mx-auto mb-3" style="background: var(--primary-color);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Smart Customer Management</h5>
+                    <p class="text-muted">Advanced customer profile system with detailed tracking, automated status updates, and comprehensive service history.</p>
+                    <ul class="list-unstyled text-start mt-3">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Automated service activation</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Customer service history</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Real-time status tracking</li>
+                    </ul>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 text-center">
-                <div class="card-body">
-                    <i class="fas fa-credit-card fa-3x text-success mb-3"></i>
-                    <h5>Payment Tracking</h5>
-                    <p class="text-muted">Complete payment recording and status tracking with multiple payment modes</p>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="stats-icon mx-auto mb-3" style="background: var(--success-color);">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Advanced Payment System</h5>
+                    <p class="text-muted">Complete payment recording and tracking with multiple payment modes, automated receipts, and revenue analytics.</p>
+                    <ul class="list-unstyled text-start mt-3">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Multiple payment methods</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Automated payment tracking</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Revenue analytics</li>
+                    </ul>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 text-center">
-                <div class="card-body">
-                    <i class="fas fa-chart-line fa-3x text-info mb-3"></i>
-                    <h5>Service Monitoring</h5>
-                    <p class="text-muted">Real-time service activation and status monitoring with automated updates</p>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="stats-icon mx-auto mb-3" style="background: var(--info-color);">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Real-time Monitoring</h5>
+                    <p class="text-muted">Live service monitoring with automated status updates, performance analytics, and intelligent alerts.</p>
+                    <ul class="list-unstyled text-start mt-3">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Live service monitoring</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Performance analytics</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Automated alerts</li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <div class="row mt-5" id="packages">
-        <div class="col-12 text-center">
-            <h2>Our Entertainment Packages</h2>
-            <p class="text-muted">Choose from our variety of entertainment packages</p>
-        </div>
-    </div>
-    
-    <div class="row">
-        {% if packages %}
-        {% for package in packages %}
-        <div class="col-md-3 mb-4">
-            <div class="card h-100">
-                <div class="card-header text-center">
-                    <h5><i class="fas fa-tv me-2"></i>{{ package.package_name }}</h5>
-                </div>
-                <div class="card-body text-center">
-                    <h3 class="text-primary mb-3">
-                        <i class="fas fa-dollar-sign"></i>{{ "%.2f"|format(package.price) }}
-                        <small class="text-muted">/month</small>
-                    </h3>
-                    <p class="text-muted">{{ package.description or 'Premium entertainment package' }}</p>
-                    <small class="text-muted">
-                        {% if package.channels %}
-                            <i class="fas fa-list me-1"></i>{{ package.channels.split('\n')|length }} channels included
-                        {% endif %}
-                    </small>
-                </div>
-                <div class="card-footer text-center">
-                    <a href="/login" class="btn btn-outline-primary btn-sm">
-                        <i class="fas fa-info-circle me-1"></i>More Details
-                    </a>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-        {% else %}
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body text-center py-5">
-                    <i class="fas fa-box fa-4x text-muted mb-3"></i>
-                    <h4>Packages Coming Soon</h4>
-                    <p class="text-muted">We're preparing exciting entertainment packages for you!</p>
-                    <a href="/login" class="btn btn-primary">
-                        <i class="fas fa-sign-in-alt me-2"></i>Login to Manage
-                    </a>
-                </div>
-            </div>
-        </div>
-        {% endif %}
     </div>
 </div>
 
+<!-- Packages Section -->
+<div class="bg-light py-5" id="packages">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="display-5 fw-bold mb-3">Entertainment Packages</h2>
+                <p class="lead text-muted">Choose from our variety of premium entertainment packages</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% if packages %}
+            {% for package in packages %}
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-white border-0 text-center py-3">
+                        <div class="stats-icon mx-auto mb-2" style="background: var(--primary-color);">
+                            <i class="fas fa-tv"></i>
+                        </div>
+                        <h5 class="fw-bold mb-0">{{ package.package_name }}</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <span class="display-6 fw-bold text-primary">${{ "%.0f"|format(package.price) }}</span>
+                            <span class="text-muted">/month</span>
+                        </div>
+                        <p class="text-muted mb-3">{{ package.description or 'Premium entertainment package with quality channels' }}</p>
+                        {% if package.channels %}
+                        <div class="mb-3">
+                            <small class="text-muted d-flex align-items-center justify-content-center">
+                                <i class="fas fa-list me-2"></i>
+                                {{ package.channels.split('\n')|length }} premium channels included
+                            </small>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer bg-white border-0 text-center">
+                        <a href="/login" class="btn btn-outline-primary">
+                            <i class="fas fa-info-circle me-2"></i>
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center py-5">
+                        <div class="stats-icon mx-auto mb-3" style="background: var(--secondary-color); color: var(--text-secondary);">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Packages Coming Soon</h4>
+                        <p class="text-muted mb-4">We're preparing exciting entertainment packages for you!</p>
+                        <a href="/login" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Access Management Portal
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-lg" style="background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));">
+                <div class="card-body text-center py-5 text-white">
+                    <h2 class="display-6 fw-bold mb-3">Ready to Get Started?</h2>
+                    <p class="lead mb-4 opacity-90">Join thousands of cable service providers who trust our platform</p>
+                    <div class="d-flex flex-wrap justify-content-center gap-3">
+                        <a href="/login" class="btn btn-light btn-lg px-4">
+                            <i class="fas fa-rocket me-2"></i>
+                            Start Managing
+                        </a>
+                        <a href="#features" class="btn btn-outline-light btn-lg px-4">
+                            <i class="fas fa-question-circle me-2"></i>
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
