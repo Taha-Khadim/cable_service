@@ -59,6 +59,9 @@ fixtures = [
 # Website route rules
 website_route_rules = [
 	{"from_route": "/customer-registration", "to_route": "/app/customer-profile/new"},
+	{"from_route": "/user-profile", "to_route": "cable_service.templates.pages.user_profile"},
+	{"from_route": "/payment", "to_route": "cable_service.templates.pages.payment"},
+	{"from_route": "/status", "to_route": "cable_service.templates.pages.status"},
 ]
 
 # Generators

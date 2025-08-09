@@ -13,11 +13,12 @@ def get_context(context):
     try:
         if frappe.db.table_exists('Package') and frappe.db.table_exists('Customer Profile'):
             context.needs_setup = False
-            context.packages = frappe.get_all('Package',
+            packages_data = frappe.get_all('Package',
                 filters={'is_active': 1},
                 fields=['name', 'package_name', 'description', 'price', 'channels'],
                 order_by='package_name'
-            ) or []
+            )
+            context.packages = packages_data if packages_data else []
     except Exception as e:
         frappe.log_error(f"Add customer page error: {str(e)}")
         context.needs_setup = True

@@ -1,0 +1,226 @@
+{% extends "templates/web.html" %}
+
+{% block title %}Payment Management - Cable Service{% endblock %}
+
+{% block page_content %}
+<div class="container section-padding">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <h1 class="fw-bold mb-2">
+                        <i class="fas fa-credit-card me-3"></i>Payment Management
+                    </h1>
+                    <p class="text-muted mb-0 fs-5">Process and track customer payments</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="/customers" class="btn btn-secondary">
+                        <i class="fas fa-users me-2"></i>View Customers
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if customer %}
+    <!-- Customer Info -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card-modern">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="stats-icon me-3">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">{{ customer.customer_name }}</h5>
+                                <p class="text-muted mb-0">{{ customer.phone }} • {{ customer.name }}</p>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-bold fs-4 text-primary">${{ "%.2f"|format(customer.total_amount) }}</div>
+                            <small class="text-muted">Total Amount</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Payment Form -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card-modern">
+                <div class="card-header">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-dollar-sign me-2"></i>Process Payment
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="paymentForm">
+                        <input type="hidden" name="customer_id" value="{{ customer.name }}">
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Payment Amount *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" name="payment_amount" 
+                                           step="0.01" min="0" max="{{ customer.total_amount }}" 
+                                           value="{{ customer.total_amount }}" required>
+                                </div>
+                                <small class="text-muted">Maximum: ${{ "%.2f"|format(customer.total_amount) }}</small>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">Payment Mode *</label>
+                                <select class="form-control" name="payment_mode" required>
+                                    <option value="">Select Payment Mode</option>
+                                    <option value="Cash" {{ 'selected' if customer.payment_mode == 'Cash' else '' }}>Cash</option>
+                                    <option value="Bank Transfer" {{ 'selected' if customer.payment_mode == 'Bank Transfer' else '' }}>Bank Transfer</option>
+                                    <option value="Card" {{ 'selected' if customer.payment_mode == 'Card' else '' }}>Card</option>
+                                    <option value="Online" {{ 'selected' if customer.payment_mode == 'Online' else '' }}>Online</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">Payment Status *</label>
+                                <select class="form-control" name="payment_status" required>
+                                    <option value="Paid" {{ 'selected' if customer.payment_status == 'Paid' else '' }}>Paid</option>
+                                    <option value="Pending" {{ 'selected' if customer.payment_status == 'Pending' else '' }}>Pending</option>
+                                    <option value="Partial" {{ 'selected' if customer.payment_status == 'Partial' else '' }}>Partial</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">Payment Date *</label>
+                                <input type="date" class="form-control" name="payment_date" 
+                                       value="{{ customer.payment_date.strftime('%Y-%m-%d') if customer.payment_date else '' }}" required>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label">Payment Notes</label>
+                                <textarea class="form-control" name="payment_notes" rows="3" 
+                                          placeholder="Add any additional notes about this payment..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-5">
+                            <div class="col-12">
+                                <div class="d-flex gap-3 justify-content-center">
+                                    <button type="submit" class="btn btn-success btn-lg px-5">
+                                        <i class="fas fa-check me-2"></i>Process Payment
+                                    </button>
+                                    <a href="/customers" class="btn btn-secondary btn-lg px-5">
+                                        <i class="fas fa-times me-2"></i>Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card-modern">
+                <div class="card-body text-center py-5">
+                    <div class="stats-icon mx-auto mb-4" style="background: var(--danger-color);">
+                        <i class="fas fa-user-times"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Customer Not Found</h4>
+                    <p class="text-muted mb-4 fs-5">Please select a valid customer to process payment</p>
+                    <a href="/customers" class="btn btn-primary btn-lg px-5">
+                        <i class="fas fa-users me-2"></i>View All Customers
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<script>
+// Set default payment date to today
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentDateInput = document.querySelector('[name="payment_date"]');
+    if (paymentDateInput && !paymentDateInput.value) {
+        paymentDateInput.value = new Date().toISOString().split('T')[0];
+    }
+});
+
+// Payment form submission
+document.getElementById('paymentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const submitBtn = this.querySelector('button[type="submit"]');
+    setLoading(submitBtn, true);
+    
+    const formData = new FormData(this);
+    const paymentAmount = parseFloat(formData.get('payment_amount'));
+    const totalAmount = {{ customer.total_amount if customer else 0 }};
+    
+    // Determine payment status based on amount
+    let paymentStatus = formData.get('payment_status');
+    if (paymentAmount >= totalAmount) {
+        paymentStatus = 'Paid';
+    } else if (paymentAmount > 0) {
+        paymentStatus = 'Partial';
+    } else {
+        paymentStatus = 'Pending';
+    }
+    
+    frappe.call({
+        method: 'frappe.client.set_value',
+        args: {
+            doctype: 'Customer Profile',
+            name: formData.get('customer_id'),
+            fieldname: {
+                'payment_amount': paymentAmount,
+                'payment_mode': formData.get('payment_mode'),
+                'payment_status': paymentStatus,
+                'payment_date': formData.get('payment_date'),
+                'service_status': paymentStatus === 'Paid' ? 'Active' : 'Pending'
+            }
+        },
+        callback: function(r) {
+            setLoading(submitBtn, false);
+            if (r.message) {
+                showToast('Payment processed successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = '/customers';
+                }, 2000);
+            } else {
+                showToast('Failed to process payment', 'danger');
+            }
+        },
+        error: function(r) {
+            setLoading(submitBtn, false);
+            const errorMsg = r.message || 'Error processing payment';
+            showToast(errorMsg, 'danger');
+        }
+    });
+});
+
+// Auto-update payment status based on amount
+document.querySelector('[name="payment_amount"]').addEventListener('input', function() {
+    const amount = parseFloat(this.value) || 0;
+    const total = {{ customer.total_amount if customer else 0 }};
+    const statusSelect = document.querySelector('[name="payment_status"]');
+    
+    if (amount >= total) {
+        statusSelect.value = 'Paid';
+    } else if (amount > 0) {
+        statusSelect.value = 'Partial';
+    } else {
+        statusSelect.value = 'Pending';
+    }
+});
+</script>
+{% endblock %}
