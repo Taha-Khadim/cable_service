@@ -58,14 +58,14 @@ fixtures = [
 
 # Website route rules
 website_route_rules = [
-	{"from_route": "/customer-registration", "to_route": "/app/customer-profile/new"},
-	{"from_route": "/packages", "to_route": "cable_service.templates.pages.packages"},
-	{"from_route": "/customers", "to_route": "cable_service.templates.pages.customers"},
-	{"from_route": "/add-customer", "to_route": "cable_service.templates.pages.add_customer"},
-	{"from_route": "/dashboard", "to_route": "cable_service.templates.pages.dashboard"},
-	{"from_route": "/user-profile", "to_route": "cable_service.templates.pages.user_profile"},
-	{"from_route": "/payment", "to_route": "cable_service.templates.pages.payment"},
-	{"from_route": "/status", "to_route": "cable_service.templates.pages.status"},
+	{"from_route": "/packages", "to_route": "packages"},
+	{"from_route": "/customers", "to_route": "customers"},
+	{"from_route": "/add-customer", "to_route": "add_customer"},
+	{"from_route": "/dashboard", "to_route": "dashboard"},
+	{"from_route": "/user-profile", "to_route": "user_profile"},
+	{"from_route": "/payment", "to_route": "payment"},
+	{"from_route": "/status", "to_route": "status"},
+	{"from_route": "/login", "to_route": "login"},
 ]
 
 # Generators

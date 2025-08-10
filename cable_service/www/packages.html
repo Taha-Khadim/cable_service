@@ -244,6 +244,60 @@
 
 {% block page_scripts %}
 <script>
+// Initialize frappe session if not available
+if (typeof frappe === 'undefined') {
+    window.frappe = {
+        session: {
+            user: '{{ frappe.session.user }}'
+        },
+        call: function(options) {
+            const url = '/api/method/' + options.method;
+            const data = {
+                ...options.args
+            };
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-Frappe-CSRF-Token': getCookie('csrf_token')
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (options.callback) {
+                    options.callback(data);
+                }
+            })
+            .catch(error => {
+                console.error('API Error:', error);
+                if (options.error) {
+                    options.error(error);
+                } else {
+                    showToast('An error occurred. Please try again.', 'danger');
+                }
+            });
+        }
+    };
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 // Add package form submission
 document.getElementById('packageForm').addEventListener('submit', function(e) {
     e.preventDefault();
