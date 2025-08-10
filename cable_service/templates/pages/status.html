@@ -242,21 +242,19 @@ document.getElementById('statusForm').addEventListener('submit', function(e) {
     const formData = new FormData(this);
     
     frappe.call({
-        method: 'frappe.client.set_value',
+        method: 'cable_service.cable_service.api.customer.update_service_status',
         args: {
-            doctype: 'Customer Profile',
-            name: formData.get('customer_id'),
-            fieldname: 'service_status',
-            value: formData.get('service_status')
+            customer_id: formData.get('customer_id'),
+            service_status: formData.get('service_status')
         },
         callback: function(r) {
             setLoading(submitBtn, false);
-            if (r.message) {
+            if (r.message && r.message.success) {
                 showToast('Service status updated successfully!', 'success');
                 bootstrap.Modal.getInstance(document.getElementById('statusModal')).hide();
                 setTimeout(() => location.reload(), 1000);
             } else {
-                showToast('Failed to update service status', 'danger');
+                showToast(r.message?.message || 'Failed to update service status', 'danger');
             }
         },
         error: function() {

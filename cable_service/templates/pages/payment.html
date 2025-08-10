@@ -177,32 +177,30 @@ document.getElementById('paymentForm').addEventListener('submit', function(e) {
     }
     
     frappe.call({
-        method: 'frappe.client.set_value',
+        method: 'cable_service.cable_service.api.customer.update_customer_payment',
         args: {
-            doctype: 'Customer Profile',
-            name: formData.get('customer_id'),
-            fieldname: {
-                'payment_amount': paymentAmount,
-                'payment_mode': formData.get('payment_mode'),
-                'payment_status': paymentStatus,
-                'payment_date': formData.get('payment_date'),
-                'service_status': paymentStatus === 'Paid' ? 'Active' : 'Pending'
-            }
+            customer_id: formData.get('customer_id'),
+            payment_data: JSON.stringify({
+                payment_amount: paymentAmount,
+                payment_mode: formData.get('payment_mode'),
+                payment_status: paymentStatus,
+                payment_date: formData.get('payment_date')
+            })
         },
         callback: function(r) {
             setLoading(submitBtn, false);
-            if (r.message) {
+            if (r.message && r.message.success) {
                 showToast('Payment processed successfully!', 'success');
                 setTimeout(() => {
                     window.location.href = '/customers';
                 }, 2000);
             } else {
-                showToast('Failed to process payment', 'danger');
+                showToast(r.message?.message || 'Failed to process payment', 'danger');
             }
         },
         error: function(r) {
             setLoading(submitBtn, false);
-            const errorMsg = r.message || 'Error processing payment';
+            const errorMsg = r.message?.message || 'Error processing payment';
             showToast(errorMsg, 'danger');
         }
     });
