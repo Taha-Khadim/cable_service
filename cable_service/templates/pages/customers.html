@@ -15,9 +15,10 @@
                     <p class="text-muted mb-0 fs-5">Manage all your customers and their services</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <a href="/add-customer" class="btn btn-primary">
+                    <!-- Button triggers Add Customer modal -->
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
                         <i class="fas fa-user-plus me-2"></i>Add New Customer
-                    </a>
+                    </button>
                     <button class="btn btn-secondary" onclick="location.reload()">
                         <i class="fas fa-sync-alt me-2"></i>Refresh
                     </button>
@@ -25,7 +26,7 @@
             </div>
         </div>
     </div>
-    
+
     {% if needs_setup %}
     <!-- Setup Alert -->
     <div class="row mb-5">
@@ -49,7 +50,7 @@
         </div>
     </div>
     {% else %}
-    
+
     <!-- Filters -->
     <div class="row mb-4">
         <div class="col-12">
@@ -93,7 +94,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Customer Stats -->
     <div class="row mb-5">
         <div class="col-lg-3 col-md-6 mb-4">
@@ -112,7 +113,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-lg-3 col-md-6 mb-4">
             <div class="stats-card success">
                 <div class="d-flex justify-content-between align-items-start">
@@ -129,7 +130,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-lg-3 col-md-6 mb-4">
             <div class="stats-card warning">
                 <div class="d-flex justify-content-between align-items-start">
@@ -146,7 +147,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-lg-3 col-md-6 mb-4">
             <div class="stats-card info">
                 <div class="d-flex justify-content-between align-items-start">
@@ -164,7 +165,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Customers Table -->
     <div class="row">
         <div class="col-12">
@@ -263,9 +264,9 @@
                     </div>
                     <h4 class="fw-bold mb-3">No Customers Yet</h4>
                     <p class="text-muted mb-4 fs-5">Start by adding your first customer to the system</p>
-                    <a href="/add-customer" class="btn btn-primary btn-lg px-5">
+                    <button class="btn btn-primary btn-lg px-5" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
                         <i class="fas fa-user-plus me-2"></i>Add First Customer
-                    </a>
+                    </button>
                 </div>
             </div>
             {% endif %}
@@ -274,6 +275,82 @@
     {% endif %}
 </div>
 
+<!-- Add Customer Modal -->
+<div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="addCustomerModalLabel">
+                    <i class="fas fa-user-plus me-2"></i>Add New Customer
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="addCustomerForm">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="customer_name" class="form-label">Customer Name *</label>
+                            <input type="text" class="form-control" id="customer_name" name="customer_name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Phone *</label>
+                            <input type="text" class="form-control" id="phone" name="phone" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" class="form-control" id="city" name="city">
+                        </div>
+                        <div class="col-12">
+                            <label for="address" class="form-label">Address *</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cnic" class="form-label">CNIC *</label>
+                            <input type="text" class="form-control" id="cnic" name="cnic" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="payment_mode" class="form-label">Payment Mode</label>
+                            <select class="form-control" id="payment_mode" name="payment_mode">
+                                <option value="Cash" selected>Cash</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="Card">Card</option>
+                                <option value="Online">Online</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="payment_status" class="form-label">Payment Status</label>
+                            <select class="form-control" id="payment_status" name="payment_status">
+                                <option value="Pending" selected>Pending</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Partial">Partial</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="service_status" class="form-label">Service Status</label>
+                            <select class="form-control" id="service_status" name="service_status" disabled>
+                                <option value="Pending" selected>Pending</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="payment_date" class="form-label">Payment Date</label>
+                            <input type="date" class="form-control" id="payment_date" name="payment_date" value="{{ frappe.utils.nowdate() }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Customer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <!-- Payment Update Modal -->
 <div class="modal fade" id="paymentModal" tabindex="-1">
     <div class="modal-dialog">
@@ -365,6 +442,53 @@
 
 {% block page_scripts %}
 <script>
+// Add Customer form submission
+document.getElementById('addCustomerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const submitBtn = this.querySelector('button[type="submit"]');
+    setLoading(submitBtn, true);
+
+    const formData = new FormData(this);
+
+    const data = {
+        doctype: 'Customer Profile',
+        customer_name: formData.get('customer_name'),
+        phone: formData.get('phone'),
+        email: formData.get('email'),
+        city: formData.get('city'),
+        address: formData.get('address'),
+        cnic: formData.get('cnic'),
+        payment_mode: formData.get('payment_mode'),
+        payment_status: formData.get('payment_status'),
+        service_status: 'Pending',  // fixed initial status
+        payment_date: formData.get('payment_date'),
+        payment_amount: 0,
+        total_amount: 0,
+        created_by: frappe.session.user
+    };
+
+    frappe.call({
+        method: 'frappe.client.insert',
+        args: { doc: data },
+        callback: function(r) {
+            setLoading(submitBtn, false);
+            if (r.message) {
+                showToast('Customer added successfully!', 'success');
+                bootstrap.Modal.getInstance(document.getElementById('addCustomerModal')).hide();
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showToast('Failed to add customer', 'danger');
+            }
+        },
+        error: function(r) {
+            setLoading(submitBtn, false);
+            const errorMsg = r.message || 'Error adding customer';
+            showToast(errorMsg, 'danger');
+        }
+    });
+});
+
 function updatePayment(customerId) {
     document.getElementById('customerId').value = customerId;
     document.querySelector('[name="payment_date"]').value = new Date().toISOString().split('T')[0];
@@ -391,12 +515,12 @@ function clearFilters() {
 // Payment form submission
 document.getElementById('paymentForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    
+
     const submitBtn = this.querySelector('button[type="submit"]');
     setLoading(submitBtn, true);
-    
+
     const formData = new FormData(this);
-    
+
     frappe.call({
         method: 'frappe.client.set_value',
         args: {
@@ -429,12 +553,12 @@ document.getElementById('paymentForm').addEventListener('submit', function(e) {
 // Service form submission
 document.getElementById('serviceForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    
+
     const submitBtn = this.querySelector('button[type="submit"]');
     setLoading(submitBtn, true);
-    
+
     const formData = new FormData(this);
-    
+
     frappe.call({
         method: 'frappe.client.set_value',
         args: {
@@ -470,29 +594,29 @@ function filterTable() {
     const statusFilter = document.getElementById('statusFilter').value;
     const paymentFilter = document.getElementById('paymentFilter').value;
     const rows = document.querySelectorAll('#customerTable tbody tr');
-    
+
     let visibleCount = 0;
-    
+
     rows.forEach(row => {
         const name = row.cells[0].textContent.toLowerCase();
         const phone = row.cells[1].textContent.toLowerCase();
         const status = row.cells[3].textContent.trim();
         const payment = row.cells[4].textContent.trim();
-        
+
         const matchesSearch = name.includes(searchTerm) || phone.includes(searchTerm);
         const matchesStatus = !statusFilter || status.includes(statusFilter);
         const matchesPayment = !paymentFilter || payment.includes(paymentFilter);
-        
+
         const isVisible = matchesSearch && matchesStatus && matchesPayment;
         row.style.display = isVisible ? '' : 'none';
-        
+
         if (isVisible) visibleCount++;
     });
-    
+
     // Show/hide no results message
     const tbody = document.querySelector('#customerTable tbody');
     let noResultsRow = tbody.querySelector('.no-results-row');
-    
+
     if (visibleCount === 0 && rows.length > 0) {
         if (!noResultsRow) {
             noResultsRow = document.createElement('tr');
@@ -511,5 +635,34 @@ function filterTable() {
         noResultsRow.style.display = 'none';
     }
 }
+
+// Helper UI functions used in multiple places:
+function setLoading(button, loading) {
+    if (loading) {
+        button.disabled = true;
+        button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Saving...';
+    } else {
+        button.disabled = false;
+        button.innerHTML = '<i class="fas fa-save me-2"></i>Save';
+    }
+}
+
+function showToast(message, type='info') {
+    const toastEl = document.createElement('div');
+    toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+    toastEl.setAttribute('role', 'alert');
+    toastEl.setAttribute('aria-live', 'assertive');
+    toastEl.setAttribute('aria-atomic', 'true');
+    toastEl.innerHTML = `
+        <div class="d-flex">
+            <div class="toast-body">${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>`;
+    document.body.appendChild(toastEl);
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
+    toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+}
+
 </script>
 {% endblock %}
