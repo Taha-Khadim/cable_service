@@ -522,25 +522,24 @@ document.getElementById('paymentForm').addEventListener('submit', function(e) {
     const formData = new FormData(this);
 
     frappe.call({
-        method: 'frappe.client.set_value',
+        method: 'cable_service.cable_service.api.customer.update_customer_payment',
         args: {
-            doctype: 'Customer Profile',
-            name: formData.get('customer_id'),
-            fieldname: {
-                'payment_amount': parseFloat(formData.get('payment_amount')),
-                'payment_mode': formData.get('payment_mode'),
-                'payment_status': formData.get('payment_status'),
-                'payment_date': formData.get('payment_date')
-            }
+            customer_id: formData.get('customer_id'),
+            payment_data: JSON.stringify({
+                payment_amount: parseFloat(formData.get('payment_amount')),
+                payment_mode: formData.get('payment_mode'),
+                payment_status: formData.get('payment_status'),
+                payment_date: formData.get('payment_date')
+            })
         },
         callback: function(r) {
             setLoading(submitBtn, false);
-            if (r.message) {
+            if (r.message && r.message.success) {
                 showToast('Payment updated successfully!', 'success');
                 bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
                 setTimeout(() => location.reload(), 1000);
             } else {
-                showToast('Failed to update payment', 'danger');
+                showToast(r.message?.message || 'Failed to update payment', 'danger');
             }
         },
         error: function() {
@@ -560,21 +559,19 @@ document.getElementById('serviceForm').addEventListener('submit', function(e) {
     const formData = new FormData(this);
 
     frappe.call({
-        method: 'frappe.client.set_value',
+        method: 'cable_service.cable_service.api.customer.update_service_status',
         args: {
-            doctype: 'Customer Profile',
-            name: formData.get('customer_id'),
-            fieldname: 'service_status',
-            value: formData.get('service_status')
+            customer_id: formData.get('customer_id'),
+            service_status: formData.get('service_status')
         },
         callback: function(r) {
             setLoading(submitBtn, false);
-            if (r.message) {
+            if (r.message && r.message.success) {
                 showToast('Service status updated successfully!', 'success');
                 bootstrap.Modal.getInstance(document.getElementById('serviceModal')).hide();
                 setTimeout(() => location.reload(), 1000);
             } else {
-                showToast('Failed to update service status', 'danger');
+                showToast(r.message?.message || 'Failed to update service status', 'danger');
             }
         },
         error: function() {

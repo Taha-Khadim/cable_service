@@ -253,7 +253,6 @@ document.getElementById('packageForm').addEventListener('submit', function(e) {
     
     const formData = new FormData(this);
     const data = {
-        doctype: 'Package',
         package_name: formData.get('package_name'),
         description: formData.get('description'),
         price: parseFloat(formData.get('price')),
@@ -262,23 +261,23 @@ document.getElementById('packageForm').addEventListener('submit', function(e) {
     };
     
     frappe.call({
-        method: 'frappe.client.insert',
+        method: 'cable_service.cable_service.api.package.create_package',
         args: {
-            doc: data
+            data: JSON.stringify(data)
         },
         callback: function(r) {
             setLoading(submitBtn, false);
-            if (r.message) {
+            if (r.message && r.message.success) {
                 showToast('Package created successfully!', 'success');
                 bootstrap.Modal.getInstance(document.getElementById('addPackageModal')).hide();
                 setTimeout(() => location.reload(), 1000);
             } else {
-                showToast('Failed to create package', 'danger');
+                showToast(r.message?.message || 'Failed to create package', 'danger');
             }
         },
         error: function(r) {
             setLoading(submitBtn, false);
-            const errorMsg = r.message || 'Error creating package';
+            const errorMsg = r.message?.message || 'Error creating package';
             showToast(errorMsg, 'danger');
         }
     });
@@ -294,31 +293,30 @@ document.getElementById('editPackageForm').addEventListener('submit', function(e
     const formData = new FormData(this);
     
     frappe.call({
-        method: 'frappe.client.set_value',
+        method: 'cable_service.cable_service.api.package.update_package',
         args: {
-            doctype: 'Package',
-            name: formData.get('package_id'),
-            fieldname: {
-                'package_name': formData.get('package_name'),
-                'description': formData.get('description'),
-                'price': parseFloat(formData.get('price')),
-                'channels': formData.get('channels'),
-                'is_active': formData.get('is_active') ? 1 : 0
-            }
+            package_id: formData.get('package_id'),
+            data: JSON.stringify({
+                package_name: formData.get('package_name'),
+                description: formData.get('description'),
+                price: parseFloat(formData.get('price')),
+                channels: formData.get('channels'),
+                is_active: formData.get('is_active') ? 1 : 0
+            })
         },
         callback: function(r) {
             setLoading(submitBtn, false);
-            if (r.message) {
+            if (r.message && r.message.success) {
                 showToast('Package updated successfully!', 'success');
                 bootstrap.Modal.getInstance(document.getElementById('editPackageModal')).hide();
                 setTimeout(() => location.reload(), 1000);
             } else {
-                showToast('Failed to update package', 'danger');
+                showToast(r.message?.message || 'Failed to update package', 'danger');
             }
         },
         error: function(r) {
             setLoading(submitBtn, false);
-            const errorMsg = r.message || 'Error updating package';
+            const errorMsg = r.message?.message || 'Error updating package';
             showToast(errorMsg, 'danger');
         }
     });
@@ -326,14 +324,13 @@ document.getElementById('editPackageForm').addEventListener('submit', function(e
 
 function editPackage(packageId) {
     frappe.call({
-        method: 'frappe.client.get',
+        method: 'cable_service.cable_service.api.package.get_package_details',
         args: {
-            doctype: 'Package',
-            name: packageId
+            package_id: packageId
         },
         callback: function(r) {
-            if (r.message) {
-                const pkg = r.message;
+            if (r.message && r.message.success) {
+                const pkg = r.message.package;
                 const form = document.getElementById('editPackageForm');
                 
                 form.querySelector('[name="package_id"]').value = pkg.name;
@@ -354,19 +351,17 @@ function togglePackage(packageId, isActive) {
     
     if (confirm(`Are you sure you want to ${action} this package?`)) {
         frappe.call({
-            method: 'frappe.client.set_value',
+            method: 'cable_service.cable_service.api.package.toggle_package_status',
             args: {
-                doctype: 'Package',
-                name: packageId,
-                fieldname: 'is_active',
-                value: isActive ? 0 : 1
+                package_id: packageId,
+                is_active: isActive ? 0 : 1
             },
             callback: function(r) {
-                if (r.message) {
+                if (r.message && r.message.success) {
                     showToast(`Package ${action}d successfully!`, 'success');
                     setTimeout(() => location.reload(), 1000);
                 } else {
-                    showToast(`Failed to ${action} package`, 'danger');
+                    showToast(r.message?.message || `Failed to ${action} package`, 'danger');
                 }
             },
             error: function() {

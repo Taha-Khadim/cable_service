@@ -637,16 +637,20 @@
             const toast = document.createElement('div');
             toast.className = `alert alert-${type} position-fixed top-0 end-0 m-3`;
             toast.style.zIndex = '9999';
+            toast.style.minWidth = '300px';
             toast.innerHTML = `
                 <div class="d-flex align-items-center">
                     <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
                     ${message}
+                    <button type="button" class="btn-close ms-auto" onclick="this.parentElement.parentElement.remove()"></button>
                 </div>
             `;
             document.body.appendChild(toast);
             
             setTimeout(() => {
-                toast.remove();
+                if (toast.parentElement) {
+                    toast.remove();
+                }
             }, 5000);
         };
         
@@ -675,6 +679,54 @@
         
         // Handle logout
         window.handleLogout = function() {
+            if (confirm('Are you sure you want to logout?')) {
+                frappe.call({
+                    method: 'logout',
+                    callback: function(r) {
+                        showToast('Logged out successfully!', 'success');
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 1000);
+                    },
+                    error: function(error) {
+                        console.error('Logout error:', error);
+                        // Force redirect even if API fails
+                        window.location.href = '/login';
+                    }
+                });
+            }
+        };
+        
+        // Initialize Frappe if not already loaded
+        if (typeof frappe === 'undefined') {
+            window.frappe = {
+                call: function(options) {
+                    fetch('/api/method/' + options.method, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(options.args || {})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (options.callback) {
+                            options.callback(data);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('API Error:', error);
+                        if (options.error) {
+                            options.error(error);
+                        }
+                    });
+                }
+            };
+        }
+        
+        // Alternative logout method using fetch
+        window.handleLogoutFetch = function() {
             if (confirm('Are you sure you want to logout?')) {
                 fetch('/api/method/logout', {
                     method: 'POST',

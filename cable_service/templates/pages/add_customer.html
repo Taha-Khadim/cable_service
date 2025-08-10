@@ -325,7 +325,6 @@ document.getElementById('customerForm').addEventListener('submit', function(e) {
     
     // Prepare customer data
     const customerData = {
-        doctype: 'Customer Profile',
         customer_name: formData.get('customer_name'),
         phone: formData.get('phone'),
         email: formData.get('email'),
@@ -337,46 +336,29 @@ document.getElementById('customerForm').addEventListener('submit', function(e) {
         payment_amount: parseFloat(formData.get('payment_amount')) || 0,
         payment_mode: formData.get('payment_mode'),
         payment_status: formData.get('payment_status'),
-        payment_date: formData.get('payment_date'),
-        created_by: '{{ frappe.session.user }}'
+        payment_date: formData.get('payment_date')
     };
     
     // Submit to Frappe
     frappe.call({
-        method: 'frappe.client.insert',
+        method: 'cable_service.cable_service.api.customer.create_customer',
         args: {
-            doc: customerData
+            data: JSON.stringify(customerData)
         },
         callback: function(r) {
             setLoading(submitBtn, false);
-            if (r.message) {
+            if (r.message && r.message.success) {
                 showToast('Customer created successfully!', 'success');
                 setTimeout(() => {
                     window.location.href = '/customers';
                 }, 2000);
             } else {
-                showToast('Failed to create customer', 'danger');
+                showToast(r.message?.message || 'Failed to create customer', 'danger');
             }
         },
         error: function(r) {
             setLoading(submitBtn, false);
-            let errorMsg = 'Error creating customer';
-            if (r && r.exc) {
-                // Parse Frappe error message
-                try {
-                    const errorLines = r.exc.split('\n');
-                    const meaningfulError = errorLines.find(line => 
-                        line.includes('ValidationError') || 
-                        line.includes('DuplicateEntryError') ||
-                        line.includes('must be')
-                    );
-                    if (meaningfulError) {
-                        errorMsg = meaningfulError.split(':').pop().trim();
-                    }
-                } catch (e) {
-                    console.error('Error parsing:', e);
-                }
-            }
+            const errorMsg = r.message?.message || 'Error creating customer';
             showToast(errorMsg, 'danger');
         }
     });
