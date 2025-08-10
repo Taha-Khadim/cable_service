@@ -60,6 +60,21 @@
 
 {% block page_scripts %}
 <script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('login-form');
     const loginBtn = document.getElementById('loginBtn');
@@ -77,12 +92,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const username = formData.get('usr');
         const password = formData.get('pwd');
         
-        // Use fetch instead of frappe.call for better compatibility
+        // Use fetch for login
         fetch('/api/method/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'X-Frappe-CSRF-Token': getCookie('csrf_token')
             },
             body: JSON.stringify({
                 usr: username,

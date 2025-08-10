@@ -12,6 +12,7 @@ def get_context(context):
                 fields=['name', 'package_name', 'description', 'price', 'channels', 'is_active'],
                 order_by='package_name'
             )
+            context.needs_setup = False
         else:
             context.packages = []
             context.needs_setup = True
